@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HeartSync</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" 
+        rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link href="/static/style.css" rel="stylesheet">
+    <!-- Fontawesome -->
+    <script src="https://kit.fontawesome.com/f6a29f035f.js" crossorigin="anonymous"></script>
+    <!-- <link rel="icon" href="../icons/heart-attack.png" type="png" sizes="16x16"> -->
+</head>
+<body>
+    <!-- NAVBAR -->
+    {% if not session["user_id"] %}
+        <nav class="navbar navbar-expand-md">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="/"><i class="fa-solid fa-heart-pulse" style="color: #ff2e2e;"></i>  HeartSync</span></a>
+                <button aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-bs-target="#navbar" data-bs-toggle="collapse" type="button">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbar">
+                    {% if session["user_id"] %}
+                        <!-- <ul class="navbar-nav me-auto mt-2">
+                            <li class="nav-item"><a class="nav-link" href="/quote">Quote</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/buy">Buy</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/sell">Sell</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/history">History</a></li>
+                        </ul> -->
+                        <ul class="navbar-nav ms-auto mt-2">
+                            <li class="nav-item"><a class="nav-link" href="/account">Account</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/logout">Log Out</a></li>
+                        </ul>
+                    {% else %}
+                        <ul class="navbar-nav ms-auto mt-2">
+                            <li class="nav-item"><a class="nav-link" href="/register">Register</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/login">Log In</a></li>
+                        </ul>
+                    {% endif %}
+                </div>
+            </div>
+        </nav>
+    {% endif %}
+        <!-- Content -->
+        {% block main %}{% endblock %}
+        <footer class="footer">
+            <i class="fa-light fa-x" style="cursor: pointer; padding-bottom: 40px; float: right;" id="closeFooter" onclick="closeFooter()"></i>
+            <p>Bootstrap</p>
+            <p>FontAwesome</p>
+            <p>Photos used for this project are AI generated. Website: https://this-person-does-not-exist.com/en</p>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas ducimus eos magnam accusamus nulla suscipit quo aperiam perferendis, pariatur et, recusandae error delectus molestiae. Porro atque iure et perspiciatis nostrum?</p>
+        </footer>  
+        <!-- SocketIO -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+        <script src="/static/index.js"></script>
+        <script src="/static/message.js"></script>
+        <script src="/static/notification.js"></script>
+        
+</html>

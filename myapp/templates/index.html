@@ -1,0 +1,90 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    Index
+{% endblock %}
+
+{% block main %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-3">
+                <div class="user-panel" data-userid="{{ profile.id }}">
+                    <div class="panel-header">
+                        <a href="/profile"><img src="{{ profile.picture }}" alt="user-profile-pic" class="user-profile-pic"></a>
+                        <div class="panel-header-info">
+                            <h5>{{ profile.full_name }}</h5>
+                            <div class="dropdown">
+                                <i class="fa-solid fa-gear fa-lg" style="color: #ffffff;" type="button" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                                </ul>
+                            </div>
+                            <!-- Notification toggle-->
+                            <a class="" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample" onclick="fetchNotifications()">
+                                <i class="fa-solid fa-bell fa-lg" style="color: #ffffff;"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <!-- Bootstrap offcanvas -->
+                    <!-- Notification content -->
+                    <div class="dropdown">
+                        <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+                          <div class="offcanvas-header">
+                            <h5 class="offcanvas-title" id="offcanvasExampleLabel">Notification</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                          </div>
+                          <div class="offcanvas-body">
+                              <ul class="notification-list">
+                                  {% for notification in notifications %}
+                                      <li class="notification-slot" data-user-id="{{notification.sender_id}}">{{notification.sender_id}} has sent you a {{notification.notification_type}}.</li>
+                                  {% endfor %}
+                              </ul>
+                          </div>
+                        </div>
+                      </div>
+                  </div>
+                <div class="user-panel-body">
+                    <nav class="navbar navbar-expand-md matches">
+                        <div class="container-fluid" id="panel-nav">
+                            <ul class="navbar-nav me-auto mt-2">
+                                <li>
+                                    <a id="match-nav" class="nav-link {% if request.path == url_for('matches.matches') %}active{% endif %}" href="{{ url_for('matches.matches') }}">Matches</a>
+                                </li>
+                                <li>
+                                    <a id="message-nav" class="nav-link {% if request.path == url_for('messages.messages') %}active{% endif %}" href="{{ url_for('messages.messages') }}">Messages</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
+                    <div class="upb-content">
+                        <!-- Modal -->
+                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">Notification</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>You've received a like.</p>
+                                </div>
+                                <div class="modal-footer">
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        {% block panel %}{% endblock %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-9">
+                <div class="display-panel">
+                    <!-- Fontawesome -->
+                    {% block display %}{% endblock %}
+                </div>               
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+

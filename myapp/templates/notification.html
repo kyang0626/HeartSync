@@ -1,0 +1,15 @@
+{% extends "index.html" %}
+
+{% block display %}
+    <div class="user-container" data-user-id="{{ senderProfile.user_id}}">
+        <img class="users-img" id="random-user-img" src="{{ senderProfile.picture }}" alt="user-picture" >
+        <h5 style="float: left;" id="random-user-fullname"></h5>
+        <p style="float: left; padding: 2px 0 0 10px;" id="random-user-age"></p>
+        <p>Is interested in you. Like him back to start a conversation.</p>
+        <div class="bottom-buttons">
+            <button id="acceptLike">Interested</button>
+            <button id="declineLike">Not Interested</button>
+            <button id="sendMessageOnNotification">Send Message</button>
+        </div>
+    </div>
+{% endblock %}

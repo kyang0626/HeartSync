@@ -1,0 +1,56 @@
+{% extends "index.html" %}
+
+{% block title %}
+    Matches
+{% endblock %}
+
+<!-- User Panel -->
+{% block panel %}
+    
+    <div class="card-slots">
+        <!-- Use javascript to insert card here -->
+        {% for user in interests %}
+            <div class="card display-user" data-selected-id="{{ user.id }}">
+                <img src="{{ user.picture }}" alt="matches-pic" data-interest-pic="{{ user.picture }}" id="card-slot-pic">
+                <div class="card-body">
+                    <p><a href="#" class="matches-name" id="interest-name">{{ user.full_name }}</a></p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
+
+<!-- Display Panel -->
+{% block display %}
+    <div class="user-container random-users" id="random-user" data-user-id="{{ match.id }}">
+        <img class="users-img" id="random-user-img" src="{{ match.picture }}" alt="user-picture" >
+        <div class="random-user-info">
+            <h5 id="random-user-fullname">{{ match.full_name }}</h5>
+        <p id="random-user-age">{{ match.age }}</p>
+        </div>
+        <div class="bottom-buttons">
+            <i class="fa-solid fa-arrow-right fa-2xl" style="color: #ef4f4f;" id="next-btn"></i>
+            <i class="fa-solid fa-heart fa-bounce fa-2xl" style="color: #ff0000;" id="interested"></i>
+            <i class="fa-solid fa-xmark fa-2xl" style="color: #FEBE48;" id="not-interested"></i>
+        </div>
+    </div>
+    
+
+    <div class ="user-container selected-user" style="display: none;">
+        <img id="selected-user-img" class="users-img" src="" alt="user-picture">
+        <div class="selected-user-info">
+            <h5 id="selected-user-fullname"></h5>
+            <p id="selected-age"></p>
+            <p id="selected-city"></p>, <p id="selected-state"></p>
+        </div>
+        <button id="sendMessageOnSelect" style="display: block;">send message</button>
+        <p onclick="moreInfo()" style="cursor: pointer;">more info</p>
+        <div class="more-info" style="display: none; padding: 0; height: 100%;">
+            <ul style="list-style: none; color: black;">
+                <li id="selected-school"></li>
+                <li id="selected-company"></li>
+            </ul>
+        </div>
+    </div>
+
+{% endblock %}

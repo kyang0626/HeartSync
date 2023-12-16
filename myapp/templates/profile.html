@@ -1,0 +1,71 @@
+{% extends "index.html" %}
+
+{% block title %}
+    Profile
+{% endblock %}
+
+{% block panel %}
+    <div class="profile-info">
+        <p>Age: {{ profile.age }}</p>
+        <p>Location: {{ profile.city }},{{ profile.state }}</p>
+        <p>About Me: {{ profile.bio }}</p>
+        <p>School: {{ profile.school }}</p>
+        <p>Company: {{ profile.company }}</p>
+    </div>
+{% endblock %}
+
+{% block display %}
+    <div class="card user-profile-card" style="width: 35rem;">
+        <img src="{{ profile.picture }}" class="card-img-top" alt="user-picture">
+        <div class="card-body">
+            <p>{{ profile.full_name }}</p>
+            <button onclick="toggleEditProfile()">Edit Profile</button>
+        </div>
+        <div class="edit-profile form-control" id="edit-profile" style="display: none;">
+            <form action="/upload" method="post" enctype="multipart/form-data">
+                <input type="file" name="photo">
+                <input type="submit" value="Upload">
+            </form>
+            <div class="mb-3">
+                <label for="bio" class="form-label">Edit Bio</label>
+                <input type="text" class="form-control" id="bio" placeholder="{{ profile.bio }}">
+            </div>
+            <div class="mb-3">
+                <label for="interests" class="form-label">Add Interests</label>
+                <input type="text" class="form-control" id="interests" placeholder="e.g. Hiking">
+            </div>
+            <div class="mb-3">
+                <label for="name" class="form-label">Edit Name</label>
+                <input type="text" class="form-control" id="name" placeholder="{{ profile.full_name }}">
+            </div>
+            <div class="mb-3">
+                <label for="age" class="form-label">Edit Age</label>
+                <input type="text" class="form-control" id="age" placeholder="{{ profile.age }}">
+            </div>
+            <div class="mb-3">
+                <label for="city" class="form-label">Edit City</label>
+                <input type="text" class="form-control" id="city" placeholder="{{ profile.city }}">
+            </div>
+            <div class="mb-3">
+                <label for="state" class="form-label">Edit State</label>
+                <input type="text" class="form-control" id="state" placeholder="{{ profile.state }}">
+            </div>
+            <div class="mb-3">
+                <label for="school" class="form-label">Edit School</label>
+                <input type="text" class="form-control" id="school" placeholder="{{ profile.school }}">
+            </div>
+            <div class="mb-3">
+                <label for="company" class="form-label">Edit Company</label>
+                <input type="text" class="form-control" id="company" placeholder="{{ profile.company }}">
+            </div>
+            <div class="mb-3">
+                <label for="gender" class="form-label">Edit Gender</label>
+                <input type="text" class="form-control" id="gender" placeholder="{{ profile.gender }}">
+            </div>
+            <div class="mb-3">
+                <label for="sexuality" class="form-label">Edit Sex</label>
+                <input type="text" class="form-control" id="sexuality" placeholder="{{ profile.sexuality }}">
+            </div>
+        </div>
+    </div>
+{% endblock %}

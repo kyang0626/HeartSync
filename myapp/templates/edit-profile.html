@@ -1,0 +1,33 @@
+{% extends "index.html" %}
+
+{% block title %}
+    Profile
+{% endblock %}
+
+{% block panel %}
+    <div class="profile-info">
+        <!-- <button id="editBioBtn" class="btn btn-primary">Bio</button>
+        
+        <div id="editProfileInputContainer" style="display: none;">
+            <input type="text" id="newProfileInfo" class="form-control" placeholder="Enter new information">
+            <button id="saveBioBtn" class="btn btn-success">Save</button>
+        </div>
+
+        <button id="editProfileBtn" class="btn btn-primary">Interest</button>
+        
+        <div id="editProfileInputContainer" style="display: none;">
+            <input type="text" id="newInterestsInfo" class="form-control" placeholder="e.g. Hiking">
+            <button id="saveProfileBtn" class="btn btn-success">Save</button>
+        </div> -->
+    </div>
+{% endblock %}
+
+{% block display %}
+<div class="card user-profile-card" style="width: 35rem;">
+    <img src="{{ profile.picture }}" class="card-img-top" alt="user-picture">
+    <div class="card-body">
+        <p>{{ profile.full_name }}</p>
+        <button><a href="./edit-profile">Edit Profile</a></button>
+    </div>
+</div>
+{% endblock %}
