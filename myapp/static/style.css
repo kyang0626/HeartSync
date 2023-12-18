@@ -237,6 +237,28 @@ a.matches-name {
     display: inline-block;
 }
 
+.selected-user-container {
+    max-width: 100%;
+    background-color: #F5F5F5;
+    /* border: 1px solid #ddd;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
+    text-align: center;
+    overflow: hidden;
+    height: 80%;
+    position: relative;
+    display: inline-block;
+}
+
+.selected-user-info {
+    display: flex;
+    bottom: 400px;
+    padding: 20px;
+}
+
+.modal-body {
+    padding: 0;
+}
+
 .users-img {
     max-width: 100%;
     height: auto;
@@ -256,26 +278,28 @@ a.matches-name {
     padding: 1.5px 0 0 10px;
 }
 
-.fa-heart, .fa-arrow-right, .fa-xmark {
-    padding: 0 10px;
-    margin: 10px 20px;
+.fa-heart, .fa-arrow-right, .fa-xmark, .fa-message {
+    margin: 10px;
     cursor: pointer;
     border-radius: 50%;
     box-shadow: 0 0 10px rgba(0, 0.2, 0.2, 0.2);
-    font-size: 4em !important;
-    width: 20%;
 }
 .fa-2xl {
     line-height: 2em !important;
     font-size: 2em !important;
 }
 
-.selected-user-info {
-    display: flex;
-    bottom: 400px;
+#next-btn, #interested, #not-interested {
+    width: 10%;
 }
 
-#selected-age, #selected-city,#selected-state {
+#acceptLike, #declineLike, #sendMessageOnNotification {
+    background: #EF4F4F;
+    border-radius: 10px;
+    color: white;
+}
+
+#selected-age, #selected-city, #selected-state {
     margin-left: 10px;
 }
 
@@ -286,8 +310,8 @@ a.matches-name {
 /* MESSAGES */
 
 .message-container {
-    height: 80vh;
-    width: 46vw;
+    height: auto;
+    width: 100%;
     border: 1px solid gray;
     position: relative;
     border-radius: 10px;
@@ -378,9 +402,16 @@ a.matches-name {
     margin: 20px 20px 0 0;
 }
 
+.modal-dialog {
+    margin-top: 100px;
+}
+
+.modal-content.message {
+    width: 200%;
+}
+
 
 /* == Notification == */
-
 #sendMessageOnNotification {
     display: none;
 }

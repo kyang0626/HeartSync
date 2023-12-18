@@ -39,23 +39,35 @@ function fetchNotifications() {
 
  // next function
  function nextUser() {
+    // get main user
     var currentUserId = getUserId();
-    
+
     $.ajax({
-        type: "POST",  
-        url: "/matches",  
+        type: "GET",  
+        url: "/matches/next-user",  
         data: { action: "next-user", currentUserId: currentUserId},
         success: function(response) {
-            console.log("Server Response:", response);
+
+            console.log(response);
+            // Create a temporary element to hold the response HTML
+            // var tempElement = $('<div>').html(response);
+
+            // // Extract the data from the HTML
+            // var userId = tempElement.find('#random-user').data('user-id');
+            // var picture = tempElement.find('#random-user-img').attr('src');
+            // var fullname = tempElement.find('#random-user-fullname').text();
+            // var age = tempElement.find('#random-user-age').text();
+
+            // // Log or use the extracted data as needed
+            // console.log("Random-user-id: ", userId);
+            // console.log("Picture: ", picture);
+            // console.log("Fullname: ", fullname);
+            // console.log("Age: ", age);
 
             $("#random-user").attr("data-user-id", response.userid);
-            $("#random-user-img").attr("src", response.picture);
+            $("#random-user-img").attr("src",  response.picture);
             $("#random-user-fullname").text(response.fullname);
             $("#random-user-age").text(response.age);
-
-            console.log("Random-user-id: ", response.userid);
-            
-            
         },
         error: function(error) {
             console.error("Error in displaying random users:", error);
@@ -64,6 +76,7 @@ function fetchNotifications() {
 }
 
 $(document).ready(function() {
+
     // close footer
     $("#closeFooter").on("click", function() {
         $(".footer").css("display", "none");
@@ -79,11 +92,13 @@ $(document).ready(function() {
         location.reload();
     })
 
-    // like button
-    $("#interested").on("click", function() {
+     // like button
+    $("body").on("click", "#interested", function() {
         var senderId = getUserId();
-        var recipientId = $(".random-users").data("user-id");
+        var recipientId = $("#random-user").data("user-id");
+
         console.log("You liked: ", recipientId);
+
         const notification = "like";
 
         $.ajax({
@@ -91,20 +106,21 @@ $(document).ready(function() {
             url: "/matches",  
             data: { action: "interested", user_id: recipientId, notification: notification },
             success: function(response) {
-                console.log("Interest inserted successfully");
+                $("#random-user").removeAttr("data-user-id")
+                console.log(response.userid + " has been liked and removed from display!");
+                console.log("Interest inserted successfully", response);
                 socket.emit("notification", { senderId: senderId, recipientId: recipientId, notification: notification});
                 
-                // card html
-                var cardHTML = '<div class="card display-user" data-selected-id="' + response.id + '">' +
+                cardHTML = '<div class="card display-user" data-selected-id="' + response.userid + '">' +
                 '<img src="' + response.picture + '" alt="matches-pic" data-interest-pic="' + response.picture + '">' +
                 '<div class="card-body" style="height: 300px; width: 100%;"></div>' +
                 '<p><a href="#" class="matches-name" id="interest-name">' + response.fullname + '</a></p>' +
-                '</div>';
-
+                '</div>';           
+                
                 // append card to panel
                 $(".card-slots").append(cardHTML);
 
-                // window.location.href = "/matches";
+                // location.reload();
                 nextUser();
             },
             error: function(error) {
@@ -132,12 +148,14 @@ $(document).ready(function() {
     });
 
     // show selected user's info
-   $(".display-user").on("click", function() {
+   $(".card-slots").on("click", ".display-user", function() {
         var selectedUser = $(this).data("selected-id");
         // var interestPic = $(this).data("interest-pic");
 
         console.log("selectedUser:", selectedUser);
         // console.log("Interest Pic:", interestPic);
+
+        $('#selectedUserModal').modal('toggle');
 
         $.ajax({
             type: "POST",
@@ -146,9 +164,9 @@ $(document).ready(function() {
             dataType: "json",
             success: function(response) {
                 console.log("User retrieve from client", response);
-                $(".random-users").css("display", "none");
-                $(".selected-user").css("display", "block");
-                $(".selected-user").attr("data-selected-id", response.userid)
+                // $(".random-users").css("display", "none");
+                // $(".selected-user").css("display", "block");
+                $(".selected-user-container").attr("data-selected-id", response.userid)
                 $("#selected-user-fullname").text(response.fullname);
                 $("#selected-user-img").attr("src", response.picture);
                 $("#selected-age").text(response.age);
@@ -165,26 +183,47 @@ $(document).ready(function() {
 
    // OPEN CHAT WINDOW from Messge route
    $(".conversation-slot").on("click", function() {
-        chatUserId = $(this).data("user-id");
-        // var interestPic = $(this).data("interest-pic");
+        var currentUserId = getUserId();
+        var chatUserId = $(this).data("user-id");
 
         console.log("Open chat User ID:", chatUserId);
-        // console.log("Interest Pic:", interestPic);
 
-        var senderInfo = "?senderId=" + chatUserId;
+        // var senderInfo = "?senderId=" + chatUserId;
 
-        window.location.href = senderInfo;
+        // window.location.href = senderInfo;
 
         $.ajax({
             type: "POST",
-            url: "/matches",
+            url: "/messages",
             data: { action: "display-conversation", selectedUser: chatUserId },
             success: function(response) {
-                console.log("success");
+                console.log("success", response);
+                console.log("messages", response.allMessages);
+                // emit("message", {"room": response.selectedUserProfile.user_id})
+                $("#chatWindowModal").modal("toggle");
 
-                response.message.forEach(function(m) {
-                    console.log(m);
-                })
+                $("#chat-window").attr("data-user-id", response.selectedUserProfile.user_id);
+                $("#user-message-img").attr("src", response.selectedUserProfile.picture);
+                $("#user-message-name").text(response.selectedUserProfile.full_name);
+
+                $("#output").empty();
+
+                console.log("chat user: ", response.selectedUserProfile.user_id);
+                
+                for (var i = 0; i < response.allMessages.length; i++) {
+
+                    if (currentUserId === response.allMessages[i].recipient_id) {
+                        $("#output").append("<div class='message-left'><div class='message-pic-div'><img class='message-pic' src='" + response.selectedUserProfile.picture + 
+                        "' alt=''></div><p class='messageP' id='message-left'>" + response.allMessages[i].content + "</p></div>");
+                    }
+                    else if (currentUserId === response.allMessages[i].sender_id) {
+                        $("#output").append("<div class='message-right'><p class='messageP' id='message-right'>" + response.allMessages[i].content + "</p></div>");
+                    }
+                    
+
+                }
+
+                // $(".message-container").css("display", "block");
             },
             error: function(error) {
                 console.log("error in showing conversation", error);

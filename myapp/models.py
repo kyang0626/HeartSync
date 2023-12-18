@@ -24,6 +24,21 @@ class UserProfile(db.Model):
     sexuality = db.Column(db.TEXT, nullable=False)
     user = db.relationship('User', backref=db.backref('profile', lazy=True))
 
+    def serializeUserProfile(self):
+        return {
+            "user_id": self.user_id,
+            "full_name": self.full_name,
+            "age": self.age,
+            "city": self.city,
+            "state": self.state,
+            "picture": self.picture,
+            "bio": self.bio,
+            "school": self.school,
+            "company": self.company,
+            "gender": self.gender,
+            "sexuality": self.sexuality,
+        }
+
 class UserInterests(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
@@ -46,6 +61,14 @@ class Message(db.Model):
     recipient_id = db.Column(db.Integer)
     content = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def serializeMessage(self):
+        return {
+            "sender_id": self.sender_id,
+            "recipient_id": self.recipient_id,
+            "content": self.content,
+            "timestamp": self.timestamp
+        }
 
 class Notification(db.Model):
     id = db.Column(db.Integer, primary_key=True)

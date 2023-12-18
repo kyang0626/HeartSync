@@ -1,6 +1,6 @@
 
     // open the notification
-    $(".notification-slot").on("click", function() {
+    $(".notification-list").on("click", ".notification-slot", function() {
         var sender_notification = $(this).data("user-id");
         console.log(sender_notification);
     
@@ -44,6 +44,6 @@ socket.on("notification", (data) => {
         $(".notification-list").append("<li class='notification-slot' data-user-id='" + data.senderId + "'>" + data.senderId + " has liked you</li>");
         $(".fa-bell").css({"color": "orange", "font-size": "1.8em"}).addClass("fa-shake");
 
-        $("#exampleModal").modal("show");
+        $("#notificationModal").modal("show");
     }
 });

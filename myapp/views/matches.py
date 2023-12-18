@@ -25,20 +25,23 @@ def matches():
             liked_id = request.form.get("user_id")
             notification = request.form.get("notification")
             print("You like: ", liked_id)
-            # print("Notification type post: ", notification)
 
+            # Check if user is already in NotInterested
             existing_not_interested = NotInterested.query.filter_by(user_id=g.user_profile.id, target_id=liked_id).first()
             if existing_not_interested:
                 db.session.delete(existing_not_interested)
                 db.session.commit()
 
             try:
+                # Add interest
                 new_interest = UserInterests(user_id=g.user_profile.id, liked_user_id=liked_id)
                 db.session.add(new_interest)
+                # Send user notification
                 new_notification = Notification(sender_id=g.user_profile.id, recipient_id=liked_id, notification_type=notification)
                 db.session.add(new_notification)
                 db.session.commit()
 
+                # Find selected user 
                 selected_user = UserProfile.query.filter(UserProfile.user_id == liked_id).first()
 
                 if selected_user:
@@ -49,24 +52,29 @@ def matches():
                                 "city": selected_user.city, 
                                 "state": selected_user.state,
                                 "school": selected_user.school, 
-                                "company": selected_user.company}
+                                "company": selected_user.company
+                                
+                                }
 
+                # return json data to display the add to left panel (matches)
                 return jsonify(user_data)
                 
-            
             except Exception as e:
                 print("Error inserting interests:", str(e))
                 return apology("Error inserting interest")
         
+        # If user is not interested
         elif action == "not-interested":
             disliked_id = request.form.get("user_id")
             print("Not Interested: ", disliked_id)
+            # look for interest user in interested
             existing_interest = UserInterests.query.filter_by(user_id=g.user_profile.id, liked_user_id=disliked_id).first()
             if existing_interest:
                 db.session.delete(existing_interest)
                 db.session.commit()
         
             try:
+                # Add non-interest to not interested table
                 not_interested = NotInterested(user_id=g.user_profile.id, target_id=disliked_id)
                 db.session.add(not_interested)
                 db.session.commit()
@@ -75,13 +83,14 @@ def matches():
                 print("Error marking as not interested:", str(e))
                 return apology("Error marking as not interested")
 
+        # show selected user's profile when clicked
         elif action == "display-user":
             selected_id = request.form.get("selectedUser")
-            # interest_pic = request.form.get("interest_pic")
-            print("next button clicked!")
             
             if selected_id:
                 print("selected id: ", selected_id)
+
+                # Find selected profile to display on the right panel
                 selected_user = UserProfile.query.filter_by(user_id=selected_id).first()
 
                 if selected_user:
@@ -94,50 +103,15 @@ def matches():
                                 "state": selected_user.state,
                                 "school": selected_user.school, 
                                 "company": selected_user.company}
-                
+                    
+                    # return json data of selected user to display
                     return jsonify(user_data)
+                
                 else:
                     abort(404)
 
             else:
                 return jsonify({"error": "No selected user id"})
-        
-        elif action == "next-user":
-
-            current_userId = request.form.get("currentUserId")
-
-            current_user_profile = UserProfile.query.filter_by(user_id=current_userId).first()
-
-            if current_user_profile.sexuality == "heterosexual":
-                users_profile = UserProfile.query.filter((UserProfile.user_id != current_userId) & (UserProfile.gender != current_user_profile.gender)).all()
-            elif current_user_profile.sexuality == "homosexual":
-                users_profile = UserProfile.query.filter((UserProfile.user_id != current_userId) & (UserProfile.gender == current_user_profile.gender)).all()
-            else:
-                users_profile = UserProfile.query.filter(UserProfile.user_id != current_userId).all()
-            
-            interests_ids = [record.liked_user_id for record in UserInterests.query.filter_by(user_id=current_userId).all()]
-            not_interested_ids = [record.target_id for record in NotInterested.query.filter_by(user_id=current_userId).all()]
-
-            users_profile = [user for user in users_profile if user.user_id not in interests_ids and user.user_id not in not_interested_ids]
-
-            if not users_profile:
-                abort(404)
-
-            random_profile = random.choice(users_profile)
-            print("random_profile: ", random_profile)
-
-            if random_profile:
-                random_user_data = {"userid": random_profile.user_id, 
-                                    "fullname": random_profile.full_name, 
-                                    "picture": random_profile.picture, 
-                                    "age": random_profile.age, 
-                                    "city": random_profile.city, 
-                                    "state": random_profile.state,
-                                    "school": random_profile.school, 
-                                    "company": random_profile.company
-                                    }
-                return jsonify(random_user_data)
-
 
         elif action == "show-sender-notification":
 
@@ -159,48 +133,101 @@ def matches():
             return jsonify(user_data)
 
     else:
-
-        interests_ids = [record.liked_user_id for record in UserInterests.query.filter_by(user_id=g.user_profile.id).all()]
-        not_interested_ids = [record.target_id for record in NotInterested.query.filter_by(user_id=g.user_profile.id).all()]
-
-        if profile.sexuality == "heterosexual":
-            #  print("heterosexual")
-             other_profiles = UserProfile.query.filter(
-            (UserProfile.user_id != g.user_id) &
-            (UserProfile.gender != profile.gender) &
-            ~UserProfile.user_id.in_(interests_ids) & 
-            ~UserProfile.user_id.in_(not_interested_ids)
-            ).all()
         
-        elif profile.sexuality == "homosexual":
-            # print("homosexual")
-            other_profiles = UserProfile.query.filter(
-            (UserProfile.user_id != g.user_id) &
-            ~UserProfile.user_id.in_(interests_ids) & 
-            ~UserProfile.user_id.in_(not_interested_ids)
-            ).all()      
-       
-        random_index = random.randint(0, len(other_profiles) - 1)
-        random_profile = other_profiles[random_index]
+        # Get a random profile to display
+        random_user = get_random_user(profile)
+        #    print(random_user)
 
-        interested_profiles = UserProfile.query.join(UserInterests, UserProfile.user_id == UserInterests.liked_user_id).filter(UserInterests.user_id == g.user_profile.id).all()
+        # Other users' profile
+        interested_profiles = get_interested_profiles(profile)
 
-        print("random profile:", random_profile.full_name)
-
+        # User's notifications
         notifications = Notification.query.filter(Notification.recipient_id == g.user_profile.id).all()
 
-        selected_id = None
-            # interest_pic = request.form.get("interest_pic")
-            
-        if selected_id:
-            print("selected id: ", selected_id)
-            
-        selected_user = UserProfile.query.filter_by(user_id = selected_id).first()
-        # print("selected profile: ", selected_user.full_name)
 
-        return render_template("matches.html", profile=profile, match=random_profile, interests=interested_profiles, notifications=notifications, selectedUser=selected_user)
+        return render_template("matches.html", profile=profile, match=random_user,
+                                interests=interested_profiles, notification=notifications)
 
-notification_bp = Blueprint("notification", __name__)
+def get_random_user(profile):
+
+    interests_ids = [record.liked_user_id for record in UserInterests.query.filter_by(user_id=g.user_profile.id).all()]
+    not_interested_ids = [record.target_id for record in NotInterested.query.filter_by(user_id=g.user_profile.id).all()]
+
+    users_query = UserProfile.query.filter(UserProfile.user_id != profile.id)
+
+    if profile.sexuality == "heterosexual":
+        users_query = users_query.filter(UserProfile.gender != profile.gender)
+    elif profile.sexuality == "homosexual":
+        users_query = users_query.filter(UserProfile.gender == profile.gender)
+
+    users_profile = users_query.filter(
+        ~UserProfile.user_id.in_(interests_ids) & ~UserProfile.user_id.in_(not_interested_ids)
+    ).all()
+
+    if not users_profile:
+        abort(404)
+    
+
+    random_profile = random.choice(users_profile)
+    return {"userid": random_profile.user_id, 
+        "fullname": random_profile.full_name, 
+        "picture": random_profile.picture, 
+        "age": random_profile.age, 
+        "city": random_profile.city, 
+        "state": random_profile.state,
+        "school": random_profile.school, 
+        "company": random_profile.company
+    }
+
+@matches_bp.route("/matches/next-user", methods=["GET"])
+def get_next_user():
+    print("working")
+
+    current_user_id = request.args.get("currentUserId")
+
+    current_user_profile = UserProfile.query.filter_by(user_id=current_user_id).first()
+
+    if current_user_profile.sexuality == "heterosexual":
+        users_profile = UserProfile.query.filter((UserProfile.user_id != current_user_id) & (UserProfile.gender != current_user_profile.gender))
+    elif current_user_profile.sexuality == "homosexual":
+        users_profile = UserProfile.query.filter((UserProfile.user_id != current_user_id) & (UserProfile.gender == current_user_profile.gender))
+    else:
+        users_profile = UserProfile.query.filter(UserProfile.user_id != current_user_id)
+
+    interests_ids = [record.liked_user_id for record in UserInterests.query.filter_by(user_id=current_user_id).all()]
+    not_interested_ids = [record.target_id for record in NotInterested.query.filter_by(user_id=current_user_id).all()]
+
+    users_profile = users_profile.filter(~UserProfile.user_id.in_(interests_ids) & ~UserProfile.user_id.in_(not_interested_ids))
+
+    if not users_profile:
+        abort(404)
+    
+    users_profile_list = list(users_profile)
+
+    random_profile = random.choice(users_profile_list)
+    print(random_profile)
+
+    print("Random profile: ", random_profile)
+
+    if random_profile:
+        random_user_data = { "userid": random_profile.user_id,
+                            "fullname": random_profile.full_name,
+                            "picture": random_profile.picture,
+                            "age": random_profile.age,
+                            "city": random_profile.city,
+                            "state": random_profile.state,
+                            "school": random_profile.school,
+                            "company": random_profile.company
+                            }
+        return jsonify(random_user_data)
+    else:
+        return jsonify({"error": "No random user found"})
+            
+def get_interested_profiles(profile):
+    return UserProfile.query.join(UserInterests, UserProfile.user_id == UserInterests.liked_user_id).filter(
+        UserInterests.user_id == profile.id
+    ).all()
+
     
 # SocketIO event handler
 @socketio.on("notification")

@@ -18,7 +18,7 @@ def messages():
 
         if action == "send-message":
             chatUserId = request.form.get("chatUserId")
-            print("Message user id: ", chatUserId)
+            print("Chat user id: ", chatUserId)
 
             message = request.form.get("content")
 
@@ -26,8 +26,21 @@ def messages():
             db.session.add(new_message)
             db.session.commit()
 
+            all_messages = Message.query.filter((Message.sender_id == profile.id) & (Message.recipient_id == chatUserId)).order_by(Message.timestamp).all()
+
+
             user_profile = UserProfile.query.filter_by(user_id=g.user_profile.id).first()
             recipient_profile = UserProfile.query.filter_by(user_id=chatUserId).first()
+            print("recipient_profile", recipient_profile)
+
+            messages_data = []
+
+            # for message in all_messages:
+            #     messages_data.append({
+            #         "sender_id": message.sender_id,
+            #         "recipient_id": message.recipient_id,
+            #         "content": message.content
+            #     })
 
             message_content = {
                 "sender": profile.id,
@@ -37,56 +50,53 @@ def messages():
                 "recipientPic": recipient_profile.picture
             }
 
-            print(user_profile.picture)
-
             return jsonify(message_content)
         
         elif action == "display-conversation":
             
             selected_user = request.form.get("selectedUser")
+            print("selecteduser: ", selected_user)
 
-            messages = Message.query.filter((Message.sender_id == selected_user) and (Message.recipient_id == selected_user))
+            selected_user_profile = UserProfile.query.filter_by(user_id=selected_user).first()
 
-            if messages:
-                message_data = {
-                    "message": message
-                }
-            
-            return jsonify(message_data)
+            userData = selected_user_profile.serializeUserProfile()
+
+            messages = Message.query.filter((
+                Message.sender_id == selected_user) & (Message.recipient_id == profile.id) | 
+                (Message.recipient_id == selected_user) & (Message.sender_id == profile.id)).all()
+
+            messageData = [message.serializeMessage() for message in messages]
+
+            selected_user_data = {
+                "selectedUserProfile": userData,
+                "allMessages": messageData
+            }
+
+            return jsonify(selected_user_data)
+
 
     else:
 
         sender_id = request.args.get("senderId")
+        print("sender_id: ", sender_id)
 
         sender_profile = UserProfile.query.filter_by(user_id=sender_id).first()
 
         all_messages = Message.query.filter((Message.sender_id == profile.id) | (Message.recipient_id == profile.id)).all()
 
-        user_messages = Message.query.filter((Message.sender_id == sender_id) | (Message.recipient_id == sender_id)).all()
-
-        if user_messages:
+        if all_messages:
             print("There are messages")
         else:
             print("no messages")
 
-        participant_ids = set()
-        for message in user_messages:
-            participant_ids.add(message.sender_id)
-            participant_ids.add(message.recipient_id)
-        
+        participant_ids = set()        
         for message in all_messages:
             participant_ids.add(message.sender_id)
             participant_ids.add(message.recipient_id)
 
         participants = UserProfile.query.filter(UserProfile.id.in_(participant_ids) & (UserProfile.user_id != g.user_profile.id)).all()
-
-        chat_profiles = UserProfile.query.filter(UserProfile.user_id != g.user_profile.id).all()
-        
-        for p in participants:
-            print("participants: ", p)
-            chat_profiles = UserProfile.query.filter((UserProfile.user_id != sender_id)).first()
-        
-        return render_template("messages.html", profile=profile, participants=participants, messages=user_messages, senderId=sender_id, senderProfile=sender_profile, allMessages=all_messages, chatProfile=chat_profiles)
+   
+        return render_template("messages.html", profile=profile, participants=participants, messages=all_messages, sender=sender_id, senderProfile=sender_profile)
     
 
 # SocketIO event handler
