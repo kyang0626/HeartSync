@@ -20,7 +20,7 @@
                                 </ul>
                             </div>
                             <!-- Notification toggle-->
-                            <a class="" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample" onclick="fetchNotifications()">
+                            <a class="fetch-notifications" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
                                 <i class="fa-solid fa-bell fa-lg" style="color: #ffffff;"></i>
                             </a>
                         </div>
@@ -35,9 +35,9 @@
                           </div>
                           <div class="offcanvas-body">
                               <ul class="notification-list">
-                                  {% for notification in notifications %}
+                                  <!-- {% for notification in notification_data %}
                                       <li class="notification-slot" data-user-id="{{notification.sender_id}}">{{notification.sender_id}} has sent you a {{notification.notification_type}}.</li>
-                                  {% endfor %}
+                                  {% endfor %} -->
                               </ul>
                           </div>
                         </div>
@@ -57,7 +57,7 @@
                         </div>
                     </nav>
                     <div class="upb-content">
-                        <!-- Modal -->
+                        <!-- Notification Modal -->
                         <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModal" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
@@ -65,10 +65,8 @@
                                     <h1 class="modal-title fs-5" id="notificationModalModalLabel">Notification</h1>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
-                                    <div class="modal-body">
+                                    <div class="modal-body notification">
                                         <p>You've received a like.</p>
-                                    </div>
-                                    <div class="modal-footer">
                                     </div>
                                 </div>
                             </div>

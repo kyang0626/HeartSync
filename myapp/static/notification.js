@@ -1,4 +1,34 @@
 
+
+
+$(document).ready(function() {
+
+    // Display notification
+    $(".panel-header-info").on("click", ".fetch-notifications", function() {
+
+        $.ajax({
+            type: "GET", 
+            url: "/get-notification",
+            success: function(response) {
+                console.log("Notifications fetched successfully:", response);
+
+                $(".notification-list").empty();
+                
+                for (var i = 0; i < response.notifications.length; i++) {
+                    $(".notification-list").append("<li class='notification-slot' data-user-id='" 
+                        + response.senderInfo[i].senderid + "'><img id='notification-img' src='" + response.senderInfo[i].senderPic 
+                        + "'>You have received a " + response.notifications[i].notificationType + "</li>");
+                }
+
+            },
+            error: function(error) {
+                console.error("Error fetching notifications:", error);
+            }
+        });
+
+    })
+        
+
     // open the notification
     $(".notification-list").on("click", ".notification-slot", function() {
         var sender_notification = $(this).data("user-id");
@@ -21,6 +51,10 @@
     
     })
 
+})
+    
+    
+    
 
 // Listener
 socket.on("notification", (data) => {

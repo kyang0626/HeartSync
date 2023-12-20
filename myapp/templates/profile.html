@@ -6,25 +6,25 @@
 
 {% block panel %}
     <div class="profile-info">
-        <p>Age: {{ profile.age }}</p>
-        <p>Location: {{ profile.city }},{{ profile.state }}</p>
-        <p>About Me: {{ profile.bio }}</p>
-        <p>School: {{ profile.school }}</p>
-        <p>Company: {{ profile.company }}</p>
+        <label>Age: <p>{{ profile.age }}</p></label>
+        <label>Location: <p>{{ profile.city }},{{ profile.state }}</p></label>
+        <label>About Me: <p>{{ profile.bio }}</p></label>
+        <label>School: <p>{{ profile.school }}</p></label>
+        <label>Company: <p>{{ profile.company }}</p></label>       
     </div>
 {% endblock %}
 
 {% block display %}
-    <div class="card user-profile-card" style="width: 35rem;">
+    <div class="card user-edit-card">
         <img src="{{ profile.picture }}" class="card-img-top" alt="user-picture">
-        <div class="card-body">
+        <div class="card-body edit-body">
             <p>{{ profile.full_name }}</p>
             <button onclick="toggleEditProfile()">Edit Profile</button>
         </div>
         <div class="edit-profile form-control" id="edit-profile" style="display: none;">
-            <form action="/upload" method="post" enctype="multipart/form-data">
-                <input type="file" name="photo">
-                <input type="submit" value="Upload">
+            <form method="post" enctype="multipart/form-data" id="uploadForm">
+                <input type="file" name="photo" id="profilePhoto">
+                <input type="submit" value="Upload" id="uploadPhoto">
             </form>
             <div class="mb-3">
                 <label for="bio" class="form-label">Edit Bio</label>
@@ -66,6 +66,7 @@
                 <label for="sexuality" class="form-label">Edit Sex</label>
                 <input type="text" class="form-control" id="sexuality" placeholder="{{ profile.sexuality }}">
             </div>
+            <button id="updateProfile">Update Profile</button>
         </div>
     </div>
 {% endblock %}

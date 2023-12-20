@@ -134,14 +134,21 @@ a.matches-name {
     height: 100px;
     width: 100%;
     border: white;
-    padding: 30px 10px 0px 10px;
-    font-weight: 400;
+    padding: 20px 10px 0px 10px;
+    font-weight: 600;
     cursor: pointer;
 }
 
 .notification-slot:hover {
     background: rgba(128, 128, 128, 0.397);
     border-radius: 10px;
+}
+
+#notification-img {
+    width: 60px;
+    height: auto;
+    border-radius: 50%;
+    margin: 0 40px 0 0;
 }
 
 .offcanvas-header {
@@ -299,6 +306,15 @@ a.matches-name {
     color: white;
 }
 
+#sendMessageOnSelect {
+    display: none;
+    background: #EF4F4F;
+    border-radius: 10px;
+    color: white;
+    margin: 10px 0 10px 40px;
+    
+}
+
 #selected-age, #selected-city, #selected-state {
     margin-left: 10px;
 }
@@ -308,7 +324,6 @@ a.matches-name {
 }
 
 /* MESSAGES */
-
 .message-container {
     height: auto;
     width: 100%;
@@ -364,7 +379,6 @@ a.matches-name {
     border-radius: 50%;
 }
 
-
 .message-right {
     display: flex;
     justify-content: end;
@@ -410,6 +424,19 @@ a.matches-name {
     width: 200%;
 }
 
+.modal-header {
+    background: #EF4F4F;
+    color: white;
+}
+
+.modal-body.notification {
+    padding: 20px;
+    text-align: center;
+}
+
+#li-more-info {
+    font-weight: 600;
+}
 
 /* == Notification == */
 #sendMessageOnNotification {
@@ -422,5 +449,37 @@ footer {
     padding: 20px;
     font-weight: 500;
     font-size: 0.8rem;
+}
+
+/* == Profile == */
+
+.user-edit-card {
+    width: 35rem;
+    height: auto;
+}
+
+.profile-info {
+    padding: 20px;
+}
+
+.profile-info label {
+    font-weight: 600;
+    display: flex;
+    width: max-content;
+}
+
+.profile-info p {
+    font-weight: 400;
+    padding-left: 10px;
+    width: 50%;
+}
+
+.edit-body {
+    position: relative;
+}
+
+.edit-profile {
+    height: auto;
+
 }
 

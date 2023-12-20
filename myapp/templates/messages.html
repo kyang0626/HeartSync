@@ -16,36 +16,7 @@
     {% endfor %}
 {% endblock %}
 
-{% block display %}
-    <!-- {% if sender %}
-        <div class="message-container" id="chat-window" data-user-id="{{ senderProfile.user_id }}">
-            <div class="message-info">
-                <img id="user-message-img" src="{{ senderProfile.picture }}" alt="user-message">
-                <h5>{{ senderProfile.full_name }}</h5>
-            </div>
-            <div class="message-area" id="output">
-                {% for message in messages %}
-                    {% if message.sender_id == profile.id %}
-                        <div class="message-right">
-                            <p class="messageP" id="message-right">{{message.content}}</p>
-                        </div>
-                    {% else %}
-                    <div class="message-left">
-                        <div class="message-pic-div">
-                            <img class="message-pic" src="{{senderProfile.picture}}" alt="">
-                        </div>
-                        <p class="messageP" id="message-left">{{message.content}}</p>
-                    </div>
-                    {% endif %}
-                {% endfor %} 
-            </div>
-            <div class="input-container">
-                <textarea id="messageInput" placeholder="Type a message"></textarea>
-                
-                <i class="fa-solid fa-paper-plane fa-2xl" style="color: #ef4848; cursor: pointer;" id="sendButton"></i>
-            </div> 
-        </div> -->
-    {% endif %}      
+{% block display %}     
       <!-- Modal -->
     <div class="modal fade" id="chatWindowModal" tabindex="-1" role="dialog" aria-labelledby="chatWindowModal" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -56,20 +27,7 @@
                         <h5 id="user-message-name"></h5>
                     </div>
                     <div class="message-area" id="output">
-                        <!-- {% for message in messages %}
-                            {% if message.sender_id == profile.id %}
-                                <div class="message-right">
-                                    <p class="messageP" id="message-right">{{message.content}}</p>
-                                </div>
-                            {% else %}
-                            <div class="message-left">
-                                <div class="message-pic-div">
-                                    <img class="message-pic" src="{{senderProfile.picture}}" alt="">
-                                </div>
-                                <p class="messageP" id="message-left">{{message.content}}</p>
-                            </div>
-                            {% endif %}
-                        {% endfor %} -->
+                        <!-- Javscript messages -->
                     </div>
                     <div class="input-container">
                         <textarea id="messageInput" placeholder="Type a message"></textarea>

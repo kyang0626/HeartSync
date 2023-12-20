@@ -12,23 +12,9 @@ def notification():
     if request.method == "POST":
 
         action = request.form.get("action")
-
-        # Return Sender INFO
-        if action == "get-user-notification":
-
-            notifications = Notification.query.filter(Notification.recipient_id == g.user_profile.id).all()
-
-            print("notifications: ", notifications)
-
-            notification_data = [{'sender': notification.sender_id, 'content': notification.notification_type} for notification in notifications]
-
-            for notification in notifications:
-                print(notification.notification_type)
-
-            return jsonify(notification_data)
         
         # ACCEPT 
-        elif action == "accept":
+        if action == "accept":
 
             sender_id = request.form.get("senderId")
 

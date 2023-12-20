@@ -86,12 +86,23 @@ def matches():
         # show selected user's profile when clicked
         elif action == "display-user":
             selected_id = request.form.get("selectedUser")
+
+            likeBackIsTrue = False
+
+            # check if the selected user has liked back
+            selected_like_back = UserInterests.query.filter(UserInterests.user_id == selected_id, UserInterests.liked_user_id == profile.id).first()
+            print("selected like back: ", selected_like_back)
+
+            if selected_like_back:
+                likeBackIsTrue = True
             
             if selected_id:
                 print("selected id: ", selected_id)
 
                 # Find selected profile to display on the right panel
                 selected_user = UserProfile.query.filter_by(user_id=selected_id).first()
+
+                print("like back: ", likeBackIsTrue)
 
                 if selected_user:
 
@@ -102,7 +113,9 @@ def matches():
                                 "city": selected_user.city, 
                                 "state": selected_user.state,
                                 "school": selected_user.school, 
-                                "company": selected_user.company}
+                                "company": selected_user.company,
+                                "likeBack": likeBackIsTrue
+                                }
                     
                     # return json data of selected user to display
                     return jsonify(user_data)
@@ -136,7 +149,7 @@ def matches():
         
         # Get a random profile to display
         random_user = get_random_user(profile)
-        #    print(random_user)
+        print(random_user)
 
         # Other users' profile
         interested_profiles = get_interested_profiles(profile)
@@ -144,6 +157,7 @@ def matches():
         # User's notifications
         notifications = Notification.query.filter(Notification.recipient_id == g.user_profile.id).all()
 
+        #check if both users are interested in each other
 
         return render_template("matches.html", profile=profile, match=random_user,
                                 interests=interested_profiles, notification=notifications)
@@ -229,7 +243,7 @@ def get_interested_profiles(profile):
     ).all()
 
     
-# SocketIO event handler
+# SocketIO notification event handler
 @socketio.on("notification")
 def handle_notification(data):
     print("Server side: received notification")

@@ -21,7 +21,7 @@
 
 <!-- Display Panel -->
 {% block display %}
-    <div class="user-container random-users" id="random-user" data-user-id="{{ match.userid }}">
+    <div class="user-container random-users" id="random-user" data-random-id="{{ match.userid }}">
         <img class="users-img" id="random-user-img" src="{{ match.picture }}" alt="user-picture">
         <div class="random-user-info">
             <h5 id="random-user-fullname">{{ match.fullname }}</h5>
@@ -45,12 +45,12 @@
                             <p id="selected-age"></p>
                             <p id="selected-city"></p>, <p id="selected-state"></p>
                         </div>
-                        <button id="sendMessageOnSelect">send message</button>
+                        <button id="sendMessageOnSelect"><i class="fa-regular fa-message fa-lg"></i>Say Hi!</button>
                         <p onclick="moreInfo()" style="cursor: pointer;">more info</p>
                         <div class="more-info" style="display: none; padding: 0; height: 100%;">
                             <ul style="list-style: none; color: black;">
-                                <li id="selected-school"></li>
-                                <li id="selected-company"></li>
+                                <li id="li-more-info">School: <p id="selected-school"></p></li>
+                                <li id="li-more-info">Company: <p id="selected-company"></p></li>
                             </ul>
                         </div>
                     </div>  
