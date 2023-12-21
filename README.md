@@ -1,6 +1,6 @@
-# Dating App MVP
+# HeartSync
 
-Welcome to the Dating App MVP! This minimal viable product is designed to provide users with a basic dating experience, featuring authentication, like/dislike functionality, live chatting, updating user information, live notifications, and user creation.
+Welcome to the HeartSync MVP! This minimal viable product is designed to provide users with a basic dating experience, featuring authentication, like/dislike functionality, live chatting, updating user information, live notifications, and user creation.
 
 ## Table of Contents
 
