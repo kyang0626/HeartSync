@@ -127,9 +127,7 @@ def matches():
                 return jsonify({"error": "No selected user id"})
 
         elif action == "show-sender-notification":
-
             sender_id = request.form.get("senderId")
-            print("senderid: ", sender_id)
 
             sender_profile = UserProfile.query.filter_by(user_id=sender_id).first()
 
@@ -146,7 +144,6 @@ def matches():
             return jsonify(user_data)
 
     else:
-        
         # Get a random profile to display
         random_user = get_random_user(profile)
         print(random_user)
@@ -163,7 +160,6 @@ def matches():
                                 interests=interested_profiles, notification=notifications)
 
 def get_random_user(profile):
-
     interests_ids = [record.liked_user_id for record in UserInterests.query.filter_by(user_id=g.user_profile.id).all()]
     not_interested_ids = [record.target_id for record in NotInterested.query.filter_by(user_id=g.user_profile.id).all()]
 
@@ -181,7 +177,6 @@ def get_random_user(profile):
     if not users_profile:
         abort(404)
     
-
     random_profile = random.choice(users_profile)
     return {"userid": random_profile.user_id, 
         "fullname": random_profile.full_name, 
@@ -191,6 +186,7 @@ def get_random_user(profile):
         "state": random_profile.state,
         "school": random_profile.school, 
         "company": random_profile.company
+
     }
 
 @matches_bp.route("/matches/next-user", methods=["GET"])

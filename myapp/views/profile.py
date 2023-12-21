@@ -8,12 +8,9 @@ profile_bp = Blueprint("profile", __name__)
 # PROFILE
 @profile_bp.route("/profile")
 def profile():
-
     profile = g.user_profile
     
     return render_template("profile.html", profile=profile)
-
-
 
 # UPDATE PROFILE
 @profile_bp.route("/update_profile", methods=["POST"])

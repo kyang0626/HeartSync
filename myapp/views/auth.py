@@ -26,9 +26,6 @@ def login():
         # Look for user in database
         user = User.query.filter_by(username=username).first()
 
-        # print("user id: ", user.username)
-        # print("password hash: ", user.password_hash)
-
         # Check if there is a user and password matches
         if user and check_password_hash(user.password_hash, password):
             # set session to the user's logging in
@@ -48,10 +45,9 @@ def login():
 @auth_bp.route("/logout")
 def logout():
     """Log user out"""
+
     # Forget any user_id
     session.pop("user_id", None)
-
-    
 
     # Redirect user to login form
     return redirect("/")
@@ -87,7 +83,6 @@ def register():
         new_user = User(username=username, password_hash=password_hash)
         db.session.add(new_user)
         db.session.commit()
-        
         
         return redirect("/")
 

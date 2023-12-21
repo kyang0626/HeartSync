@@ -16,9 +16,9 @@ def messages():
 
         action = request.form.get("action")
 
+        # Send message
         if action == "send-message":
             chatUserId = request.form.get("chatUserId")
-            print("Chat user id: ", chatUserId)
 
             message = request.form.get("content")
 
@@ -33,15 +33,6 @@ def messages():
             recipient_profile = UserProfile.query.filter_by(user_id=chatUserId).first()
             print("recipient_profile", recipient_profile)
 
-            messages_data = []
-
-            # for message in all_messages:
-            #     messages_data.append({
-            #         "sender_id": message.sender_id,
-            #         "recipient_id": message.recipient_id,
-            #         "content": message.content
-            #     })
-
             message_content = {
                 "sender": profile.id,
                 "recipient": chatUserId,
@@ -52,8 +43,8 @@ def messages():
 
             return jsonify(message_content)
         
+        # Show selected user's conversation
         elif action == "display-conversation":
-            
             selected_user = request.form.get("selectedUser")
             print("selecteduser: ", selected_user)
 
@@ -74,6 +65,7 @@ def messages():
 
             return jsonify(selected_user_data)
         
+        # Quick message from notification or match route
         elif action == "quick-message":
             chatUserId = request.form.get("chatUserId")
             print("Chat user id: ", chatUserId)
@@ -103,7 +95,6 @@ def messages():
 
 
     else:
-
         sender_id = request.args.get("senderId")
         print("sender_id: ", sender_id)
 
@@ -122,6 +113,7 @@ def messages():
   
 
 # SocketIO event handler
+# Listens for messages
 @socketio.on("message")
 def handle_message(data):
     senderId = data["senderId"]
@@ -135,10 +127,9 @@ def handle_message(data):
     print(f"Received {message} from {senderId} on server")
     emit("message", {"senderId": senderId, "recipientId": recipientId, "message": message, "senderPic": senderPic, "recipientPic": recipientPic, "room": recipientId}, room=recipientId)
 
-
+# Listens for who joins the room
 @socketio.on('join_room')
 def handle_join_room(data):
     room = data['room']
     join_room(room)
 
-    print(f"User {room} has joined room {data}")

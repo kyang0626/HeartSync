@@ -29,11 +29,9 @@ def notification():
                 # print(g.user_profile.id)
                 new_interest = UserInterests(user_id=g.user_profile.id, liked_user_id=sender_id)
                 db.session.add(new_interest)
-                print(f"Liked {sender_id} back")
 
                 # delete the notification after accept
                 delete_notification = Notification.query.filter_by(sender_id=sender_id, recipient_id=g.user_profile.id).first()
-                print(f"{delete_notification} deleted")
 
                 if delete_notification:
                     db.session.delete(delete_notification)
@@ -77,7 +75,6 @@ def notification():
                 return apology("Error marking as not interested")
             
     else:
-
         sender_id = request.args.get("senderId")
         print("Notification senderid: ", sender_id)
 
@@ -85,7 +82,8 @@ def notification():
         
         return render_template("notification.html", profile=g.user_profile, senderProfile=sender_user_profile)
     
-    
+
+# Listens for notification
 @socketio.on("notification")
 def handle_notification(data):
     print("Notification: notification received")

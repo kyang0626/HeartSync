@@ -31,6 +31,7 @@ db.init_app(app)
 @app.before_request
 def before_request():
     from .models import UserProfile
+    # identify user
     user_id = session.get('user_id')
     g.user_id = user_id
 
@@ -41,6 +42,7 @@ def before_request():
         if user_profile:
             g.user_profile = user_profile
 
+# Route blueprints
 app.register_blueprint(index_bp)
 app.register_blueprint(auth_bp)
 app.register_blueprint(matches_bp)
@@ -48,8 +50,9 @@ app.register_blueprint(message_bp)
 app.register_blueprint(profile_bp)
 app.register_blueprint(notification_bp)
 
+# create context and bind application
 with app.app_context():
-    #create all tables in the database
+    #create all tables in the database if they don't exist
     db.create_all()
 
 # if __name__ == '__main__':

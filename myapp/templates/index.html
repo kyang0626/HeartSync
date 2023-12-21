@@ -35,16 +35,14 @@
                           </div>
                           <div class="offcanvas-body">
                               <ul class="notification-list">
-                                  <!-- {% for notification in notification_data %}
-                                      <li class="notification-slot" data-user-id="{{notification.sender_id}}">{{notification.sender_id}} has sent you a {{notification.notification_type}}.</li>
-                                  {% endfor %} -->
+                                <!-- Javscript append elements here -->
                               </ul>
                           </div>
                         </div>
                       </div>
                   </div>
                 <div class="user-panel-body">
-                    <nav class="navbar navbar-expand-md matches">
+                    <nav class="navbar navbar-expand-md matches" id="matches-navbar">
                         <div class="container-fluid" id="panel-nav">
                             <ul class="navbar-nav me-auto mt-2">
                                 <li>
@@ -59,7 +57,7 @@
                     <div class="upb-content">
                         <!-- Notification Modal -->
                         <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModal" aria-hidden="true">
-                            <div class="modal-dialog">
+                            <div class="modal-dialog notificationDialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                     <h1 class="modal-title fs-5" id="notificationModalModalLabel">Notification</h1>

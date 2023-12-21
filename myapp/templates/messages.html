@@ -26,10 +26,11 @@
 {% block display %}     
       <!-- Modal -->
     <div class="modal fade" id="chatWindowModal" tabindex="-1" role="dialog" aria-labelledby="chatWindowModal" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog messageDialog" role="document">
             <div class="modal-content message">
                 <div class="message-container" id="chat-window">
                     <div class="message-info">
+                        <div class="closeChatWindow">x</div>
                         <img id="user-message-img" src="" alt="user-message">
                         <h5 id="user-message-name"></h5>
                     </div>
