@@ -63,14 +63,12 @@ $(document).ready(function() {
                 
                 cardHTML = '<div class="card display-user" data-selected-id="' + response.userid + '">' +
                 '<img src="' + response.picture + '" alt="matches-pic" data-interest-pic="' + response.picture + '">' +
-                '<div class="card-body" style="height: 300px; width: 100%;"></div>' +
+                '<div class="card-body" style="height: 300px; width: 100%;">' +
                 '<p><a href="#" class="matches-name" id="interest-name">' + response.fullname + '</a></p>' +
                 '</div>';           
                 
                 // append card to panel
                 $(".card-slots").append(cardHTML);
-
-                $(".display-panel").append("<div class='testing-id'>hello</div>");
 
                 // location.reload();
                 nextUser();

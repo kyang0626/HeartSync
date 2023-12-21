@@ -6,7 +6,8 @@
     <title>HeartSync</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" 
         rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <link href="/static/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css" >
+    <link rel="stylesheet" href="/static/mqueries.css">
     <!-- Fontawesome -->
     <script src="https://kit.fontawesome.com/f6a29f035f.js" crossorigin="anonymous"></script>
     <!-- <link rel="icon" href="../icons/heart-attack.png" type="png" sizes="16x16"> -->
@@ -46,10 +47,15 @@
         {% block main %}{% endblock %}
         <footer class="footer">
             <i class="fa-light fa-x" style="cursor: pointer; padding-bottom: 40px; float: right;" id="closeFooter" onclick="closeFooter()"></i>
-            <p>using Bootstrap</p>
+            <p>Using Bootstrap</p>
             <p>Icons by FontAwesome</p>
             <p>Notification sounds by Pixabay</p>
-            <p>Photos used for this project are AI generated. Website: https://this-person-does-not-exist.com/en</p>
+            <p>The people's photos used for this project are AI generated. Website: https://this-person-does-not-exist.com/en</p>
+            <p id="disclaimer">Disclaimer: Photo Ownership</p>
+            <p>The photos used in this project are for illustrative purposes only. The ownership and copyright of these photos belong to their respective creators 
+                and copyright holders. The use of these photos in this project does not imply ownership or endorsement. If you are the copyright owner of any of the 
+                photos used and would like them to be removed or credited differently, please contact us, and we will promptly address your concerns.
+                This project respects the intellectual property rights of others, and every effort has been made to comply with copyright laws and give proper attribution where applicable.</p>
         </footer>  
         <!-- SocketIO -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>

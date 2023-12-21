@@ -6,8 +6,6 @@
     const message = messageInput.val();
     messageInput.val("");
 
-    var notification = "message";
-
     $.ajax({
         type: "POST",
         url: "/messages",
@@ -28,16 +26,36 @@ $(document).ready(function () {
 
     // Initiate conversation with selected user
     $("#sendMessageOnNotification").on("click", function() {
-        var senderId = $(".user-container").data("user-id");
-        console.log("datauserid: ", senderId);
+        var chatId = $(".user-container").data("user-id");
+        console.log("datauserid: ", chatId);
 
-        window.location.href = "/messages?senderId=" + senderId;
+        var message = "<i class='fa-solid fa-hand fa-lg' style='color: #fef620;'></i>";
+
+            $.ajax({
+                type: "POST",
+                url: "/messages",
+                data: { action: "quick-message", chatUserId: chatId, content: message},
+                success: function(response) {
+                    console.log("Success", response.content);
+                    // socket.emit("notification", { senderId: senderId, recipientId: chatId, notification: notification});
+                    window.location.href = "/messages?senderId=" + chatId;
+
+                    socket.emit("message", {senderId: response.sender, recipientId: response.recipient, message: response.content, senderPic: response.senderPic, recipientPic: response.recipientPic});
+                    
+                },
+                error: function(error) {
+                    console.error("Error in sending message to user", error);
+                }
+            });
+
+        });
+
     });
 
     $("#sendMessageOnSelect").on("click", function() {
         var chatId = $(".selected-user-container").data("selected-id");
 
-        var message = "Hi";
+        var message = "<i class='fa-solid fa-hand fa-lg' style='color: #fef620;'></i>";
 
         $.ajax({
             type: "POST",
@@ -101,9 +119,8 @@ $(document).ready(function () {
             url: "/messages",
             data: { action: "display-conversation", selectedUser: chatUserId },
             success: function(response) {
-                console.log("success", response);
-                console.log("messages", response.allMessages);
-                // emit("message", {"room": response.selectedUserProfile.user_id})
+                // console.log("success", response);
+                // console.log("messages", response.allMessages);
                 $("#chatWindowModal").modal("toggle");
 
                 $("#chat-window").attr("data-user-id", response.selectedUserProfile.user_id);
@@ -134,10 +151,6 @@ $(document).ready(function () {
 
     });
 
-
-});
-
-
 // send message sound
 var sendSound = new Audio('../static/sound/send-msg.mp3');
 function sendAudio() {
@@ -167,16 +180,23 @@ socket.on("message", (data) => {
             console.log("its this!")
             $("#output").append("<div class='message-left'><div class='message-pic-div'><img class='message-pic' src='" + data.senderPic + "'></div><p class='messageP' id='message-left'>" + data.message + "</p></div>");
             $("#message-nav").css("background-color", "red");
-            $(".senderMessage").text(data.message);
+
+            // chat-window scrolls down when send
             $("#output").scrollTop($("#output")[0].scrollHeight);
+
+            // display user's message on card-slot
+            $(".senderMessage").text(data.message);
+
         }
-        // or if user is the recipient
+        // else if user is the recipient
         else if (currentUserId === data.recipientId) {
             console.log("its this 2");
             $("#output").append("<div class='message-left'><div class='message-pic-div'><img class='message-pic' src='" + data.senderPic + "'></div><p class='messageP' id='message-left'>" + data.message + "</p></div>");
             $("#message-nav").css("background-color", "red");
-            $(".senderMessage").text(data.message);
+            
+            // chat-window scrolls down when send
             $("#output").scrollTop($("#output")[0].scrollHeight);
+            $(".senderMessage").text(data.message);
         }
     }
     // or if user is sender

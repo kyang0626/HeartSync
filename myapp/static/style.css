@@ -48,7 +48,7 @@ a.matches-name {
 
 .user-panel {
     width: 100%;
-    height: 15%;
+    height: 142px;
     color: white;
     background: #EF4F4F;
 }
@@ -296,6 +296,14 @@ a.matches-name {
     font-size: 2em !important;
 }
 
+.no-messages-default {
+    margin: 200px 100px;
+}
+
+.fa-envelope-open-text {
+    font-size: 10rem !important;
+}
+
 #next-btn, #interested, #not-interested {
     width: 10%;
 }
@@ -445,10 +453,18 @@ a.matches-name {
 
 footer {
     background-color: white;
-    height: 200px;
+    height: auto;
     padding: 20px;
     font-weight: 500;
     font-size: 0.8rem;
+    position: relative;
+    z-index: -1;
+}
+
+#disclaimer {
+    font-weight: 700;
+    font-size: 0.9rem;
+    margin: 0;
 }
 
 /* == Profile == */

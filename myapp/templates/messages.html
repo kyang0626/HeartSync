@@ -14,6 +14,13 @@
         </div>
     </div>
     {% endfor %}
+
+    {% if not participants %}
+    <div class="no-messages-default">
+        <i class="fa-solid fa-envelope-open-text fa-2xl" style="color: #ef4f4f;"></i>
+    </div>
+        
+    {% endif %}
 {% endblock %}
 
 {% block display %}     
