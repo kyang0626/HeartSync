@@ -1,4 +1,35 @@
-# HeartSync
-- a minimal viable product dating app built for HarvardX online course CS50 2023
-- key features: authentication, real-time chat feature, add and remove users from database, notifications
-- Technologies: Python, Flask, JQuery, JavaScript, AJAX, HTML, CSS, Jinja, Sqlite
+# Dating App MVP
+## Welcome to the Dating App MVP! This minimal viable product is designed to provide users with a basic dating experience, featuring authentication, like/dislike functionality, live chatting, updating user information, live notifications, and user creation.
+
+Table of Contents
+Features
+Getting Started
+Prerequisites
+Installation
+Usage
+Authentication
+Like/Dislike
+Live Chatting
+Update User Information
+Live Notifications
+User Creation
+Contributing
+License
+Features
+Authentication
+Secure user authentication ensures that only registered users can access the app. Users can sign up for a new account or log in using existing credentials.
+
+Like/Dislike
+Users have the ability to express their interest in other users by liking or disliking their profiles. The app's matching algorithm helps connect users who have expressed mutual interest.
+
+Live Chatting
+Engage in real-time conversations with matched users through the app's live chatting feature. Build connections and get to know each other better.
+
+Update User Information
+Keep your profile up-to-date by easily updating your information. Add new photos, edit your bio, or modify other details to present the most accurate picture of yourself.
+
+Live Notifications
+Receive instant notifications for new likes, matches, and messages. Stay informed about activity on your profile and engage with other users promptly.
+
+User Creation
+Create a new user profile by providing basic information, uploading photos, and setting preferences. Kickstart your dating journey by becoming part of the app's community.
