@@ -5,9 +5,6 @@ Welcome to the HeartSync MVP! This minimal viable product is designed to provide
 ## Table of Contents
 
 - [Features](#features)
-- [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
 - [Usage](#usage)
   - [Authentication](#authentication)
   - [Like/Dislike](#like-dislike)
@@ -15,7 +12,6 @@ Welcome to the HeartSync MVP! This minimal viable product is designed to provide
   - [Update User Information](#update-user-information)
   - [Live Notifications](#live-notifications)
   - [User Creation](#user-creation)
-- [Contributing](#contributing)
 - [License](#license)
 
 ## Features
@@ -43,3 +39,7 @@ Receive instant notifications for new likes, matches, and messages. Stay informe
 ### User Creation
 
 Create a new user profile by providing basic information, uploading photos, and setting preferences. Kickstart your dating journey by becoming part of the app's community.
+
+### License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
