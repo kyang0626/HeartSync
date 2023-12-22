@@ -1,103 +1,54 @@
-  // Send Message Function
-  function sendMessage(chatId) {
-    var senderId = getUserId();
-    var chatId = $("#chat-window").data("user-id");
-    const messageInput = $("#messageInput");
-    const message = messageInput.val();
-    messageInput.val("");
+// Get current user id
+function getUserId() {
+    var userInSession = $(".user-panel").data("userid");
+    // console.log("user in session: ", userInSession);
 
-    $.ajax({
-        type: "POST",
-        url: "/messages",
-        data: { action: "send-message", chatUserId: chatId, content: message},
-        success: function(response) {
-            console.log("Success", response.content);
-            // socket.emit("notification", { senderId: senderId, recipientId: chatId, notification: notification});
-            
-            socket.emit("message", {senderId: senderId, recipientId: chatId, message: message, senderPic: response.senderPic, recipientPic: response.recipientPic});
-        },
-        error: function(error) {
-            console.error("Error in sending message to user", error);
-        }
-    });
+    return userInSession;
 }
 
-$(document).ready(function () {
+// Send Message Function
+function sendMessage(chatId) {
+var senderId = getUserId();
+var chatId = $("#chat-window").data("user-id");
+const messageInput = $("#messageInput");
+const message = messageInput.val();
+messageInput.val("");
+
+$.ajax({
+    type: "POST",
+    url: "/messages",
+    data: { action: "send-message", chatUserId: chatId, content: message},
+    success: function(response) {
+        console.log("Success", response.content);
+        // socket.emit("notification", { senderId: senderId, recipientId: chatId, notification: notification});
+        
+        socket.emit("message", {senderId: senderId, recipientId: chatId, message: message, senderPic: response.senderPic, recipientPic: response.recipientPic});
+    },
+    error: function(error) {
+        console.error("Error in sending message to user", error);
+    }
+});
+
+}
+
+$(document).ready(function() {
 
     // Initiate conversation with selected user
     $("#sendMessageOnNotification").on("click", function() {
+
         var chatId = $(".user-container").data("user-id");
-        console.log("datauserid: ", chatId);
 
-        var message = "<i class='fa-solid fa-hand fa-lg' style='color: #fef620;'></i>";
-
-            $.ajax({
-                type: "POST",
-                url: "/messages",
-                data: { action: "quick-message", chatUserId: chatId, content: message},
-                success: function(response) {
-                    console.log("Success", response.content);
-                    // socket.emit("notification", { senderId: senderId, recipientId: chatId, notification: notification});
-                    window.location.href = "/messages?senderId=" + chatId;
-
-                    socket.emit("message", {senderId: response.sender, recipientId: response.recipient, message: response.content, senderPic: response.senderPic, recipientPic: response.recipientPic});
-                    
-                },
-                error: function(error) {
-                    console.error("Error in sending message to user", error);
-                }
-            });
-
-        });
+        window.location.href = "/messages?senderId=" + chatId;
 
     });
 
     $("#sendMessageOnSelect").on("click", function() {
+
         var chatId = $(".selected-user-container").data("selected-id");
 
-        var message = "<i class='fa-solid fa-hand fa-lg' style='color: #fef620;'></i>";
-
-        $.ajax({
-            type: "POST",
-            url: "/messages",
-            data: { action: "quick-message", chatUserId: chatId, content: message},
-            success: function(response) {
-                console.log("Success", response.content);
-                // socket.emit("notification", { senderId: senderId, recipientId: chatId, notification: notification});
-                window.location.href = "/messages?senderId=" + chatId;
-
-                socket.emit("message", {senderId: response.sender, recipientId: response.recipient, message: response.content, senderPic: response.senderPic, recipientPic: response.recipientPic});
-                
-            },
-            error: function(error) {
-                console.error("Error in sending message to user", error);
-            }
-        });
+        window.location.href = "/messages?senderId=" + chatId;
 
     });
-
-    // Check if the current URL contains "/messages"
-    // if (window.location.href.includes("/messages")) {
-    //     // If the URL contains "/messages", trigger the modal toggle
-    //     var currentUrl = window.location.href;
-
-    //     console.log("url: ", currentUrl);
-
-    //     var urlParams = new URLSearchParams(currentUrl);
-
-    //     var senderId = urlParams.get("senderId");
-    //     console.log("SenderId:", senderId);
-
-    //     if (senderId) {
-    //         console.log("SenderId:", senderId);
-
-    //         $("#chatWindowModal").modal("toggle");
-    //     }
-    //     else {
-    //         console.log("unable to retrieve senderid params");
-    //     }
-
-    // }
 
     // Send message
     $("#sendButton").on("click", function() {
@@ -109,7 +60,6 @@ $(document).ready(function () {
 
     // OPEN CHAT WINDOW from Message route
     $(".conversation-slot").on("click", function() {
-        var currentUserId = getUserId();
         var chatUserId = $(this).data("user-id");
 
         console.log("Open chat User ID:", chatUserId);
@@ -142,7 +92,6 @@ $(document).ready(function () {
                     }
                 }
 
-                // $(".message-container").css("display", "block");
             },
             error: function(error) {
                 console.log("error in showing conversation", error);
@@ -150,6 +99,56 @@ $(document).ready(function () {
         });
 
     });
+
+    // Check if the current URL contains "/messages"
+    if (window.location.href.includes("/messages?senderId=")) {
+        // If the URL contains "/messages?senderId=", trigger the modal toggle
+        var currentUrl = window.location.href;
+
+        var urlObj = new URL(currentUrl);
+        var searchParams = urlObj.searchParams;
+        var senderId = searchParams.get('senderId');
+
+        if (senderId) {        
+            console.log("senderId from urlParams: ", senderId);
+
+            $.ajax({
+                type: "GET",
+                url: "/get-user",
+                data: { sender: senderId },
+                success: function(response) {
+                    console.log("success", response);
+
+                    $("#chatWindowModal").modal("toggle");
+                    $("#chat-window").attr("data-user-id", response.userData.user_id);
+                    $("#user-message-img").attr("src", response.userData.picture);
+                    $("#user-message-name").text(response.userData.full_name);
+
+                    for (var i = 0; i < response.messageData.length; i++) {
+
+                        if (currentUserId === response.messageData[i].recipient_id) {
+                            $("#output").append("<div class='message-left'><div class='message-pic-div'><img class='message-pic' src='" + response.selectedUserProfile.picture + 
+                            "' alt=''></div><p class='messageP' id='message-left'>" + response.allMessages[i].content + "</p></div>");
+                        }
+                        else if (currentUserId === response.messageData[i].sender_id) {
+                            $("#output").append("<div class='message-right'><p class='messageP' id='message-right'>" + response.messageData[i].content + "</p></div>");
+                        }
+                    }
+
+                },
+                error: function(error) {
+                    console.log("error in retrieving user's profile");
+                }
+            })
+            
+
+        }
+        else {
+            console.log("unable to retrieve senderid params");
+        }
+    }
+
+});
 
 // send message sound
 var sendSound = new Audio('../static/sound/send-msg.mp3');
@@ -165,10 +164,10 @@ socket.on("message", (data) => {
 
     var chatWindow = $(".message-container").data("user-id");
 
-    console.log("chat room: ", chatWindow);
+    // console.log("chat room: ", chatWindow);
 
-    console.log("sender: ", data.senderId);
-    console.log("recipient: ", data.recipientId);
+    // console.log("sender: ", data.senderId);
+    // console.log("recipient: ", data.recipientId);
 
     // If user is the receiver
     if (currentUserId === data.room) {
@@ -199,6 +198,7 @@ socket.on("message", (data) => {
             $(".senderMessage").text(data.message);
         }
     }
+    
     // or if user is sender
     else {
         $("#output").append("<div class='message-right'><p class='messageP' id='message-right'>" + data.message + "</p></div>");
