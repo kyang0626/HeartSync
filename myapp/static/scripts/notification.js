@@ -1,5 +1,10 @@
+// Get current user id
+function getUserId() {
+    var userInSession = $(".user-panel").data("userid");
+    // console.log("user in session: ", userInSession);
 
-
+    return userInSession;
+}
 
 $(document).ready(function() {
 
@@ -52,24 +57,24 @@ $(document).ready(function() {
     })
 
 })
-    
-    
-    
+
+var notificatonSound = new Audio('../static/sound/notification.mp3');
+
+function playSound() {
+    notificatonSound.play();
+}
 
 // Listener
 socket.on("notification", (data) => {
     // console.log("Client side: notification received", data);
 
-    // console.log("Client side: recipient: ", data.room);
+    var currentUserId = getUserId();
+    
+    console.log("notification current user: ", currentUserId);
+    
     socket.emit('join_room', {room: data.room});
 
-    var currentUserId = getUserId();
-
-    var notificatonSound = new Audio('../static/sound/notification.mp3');
-
-    function playSound() {
-        notificatonSound.play();
-    }
+    console.log(data.room);
 
     //if user is the recipient
     if (currentUserId === data.room) {

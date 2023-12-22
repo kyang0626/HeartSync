@@ -19,6 +19,7 @@ def index():
 
 @index_bp.route("/get-notification")
 def get_notification():
+    print("its working on get-notification")
     profile = g.user_profile
 
     notifications = Notification.query.filter_by(recipient_id=profile.id).all()
@@ -37,7 +38,8 @@ def get_notification():
             })
     
     if senders_profile:
-        for sender in senders_profile: 
+        for sender in senders_profile:
+            print(sender) 
             sendersInfo_data.append({
                 "senderid": sender.user_id,
                 "senderPic": sender.picture

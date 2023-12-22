@@ -191,7 +191,6 @@ def get_random_user(profile):
 
 @matches_bp.route("/matches/next-user", methods=["GET"])
 def get_next_user():
-    print("working")
 
     current_user_id = request.args.get("currentUserId")
 
@@ -215,7 +214,6 @@ def get_next_user():
     users_profile_list = list(users_profile)
 
     random_profile = random.choice(users_profile_list)
-    print(random_profile)
 
     print("Random profile: ", random_profile)
 
@@ -243,13 +241,13 @@ def get_interested_profiles(profile):
 @socketio.on("notification")
 def handle_notification(data):
     print("Server side: received notification")
-    sender_id_= data["senderId"]
+    sender_id = data["senderId"]
     recipient_id = data["recipientId"]
     notification = data["notification"]
 
     join_room(recipient_id)
 
-    emit("notification", {'notification': notification, 'recipientId': recipient_id, 'senderId': sender_id_, 'room': recipient_id}, room=recipient_id)
+    emit("notification", {'notification': notification, 'recipientId': recipient_id, 'senderId': sender_id, 'room': recipient_id}, room=recipient_id)
 
 @socketio.on('join_room')
 def handle_join_room(data):

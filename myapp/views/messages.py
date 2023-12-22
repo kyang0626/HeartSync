@@ -64,42 +64,9 @@ def messages():
             }
 
             return jsonify(selected_user_data)
-        
-        # Quick message from notification or match route
-        elif action == "quick-message":
-            chatUserId = request.form.get("chatUserId")
-            print("Chat user id: ", chatUserId)
-
-            message = request.form.get("content")
-
-            new_message = Message(sender_id=profile.id, recipient_id=chatUserId, content=message)
-            db.session.add(new_message)
-            db.session.commit()
-
-            all_messages = Message.query.filter((Message.sender_id == profile.id) & (Message.recipient_id == chatUserId)).order_by(Message.timestamp).all()
-
-
-            user_profile = UserProfile.query.filter_by(user_id=g.user_profile.id).first()
-            recipient_profile = UserProfile.query.filter_by(user_id=chatUserId).first()
-            print("recipient_profile", recipient_profile)
-
-            message_content = {
-                "sender": profile.id,
-                "recipient": chatUserId,
-                "content": message,
-                "senderPic": user_profile.picture,
-                "recipientPic": recipient_profile.picture
-            }
-
-            return jsonify(message_content)
-
 
     else:
-        sender_id = request.args.get("senderId")
-        print("sender_id: ", sender_id)
-
-        sender_profile = UserProfile.query.filter_by(user_id=sender_id).first()
-
+        
         all_messages = Message.query.filter((Message.sender_id == profile.id) | (Message.recipient_id == profile.id)).all()
 
         participant_ids = set()        
@@ -109,8 +76,28 @@ def messages():
 
         participants = UserProfile.query.filter(UserProfile.id.in_(participant_ids) & (UserProfile.user_id != g.user_profile.id)).all()
    
-        return render_template("messages.html", profile=profile, participants=participants, senderProfile=sender_profile, messages=all_messages)
+        return render_template("messages.html", profile=profile, participants=participants)
   
+@message_bp.route("/get-user", methods=["GET"])
+def get_user():
+
+    chatId = request.args.get("sender")
+
+    chat_profile = UserProfile.query.filter_by(user_id=chatId).first()
+
+    user_data = chat_profile.serializeUserProfile()
+
+    chat_messages = Message.query.filter_by(recipient_id=chatId).all()
+   
+    messageData = [message.serializeMessage() for message in chat_messages]
+
+    chat_data = {
+        "userData": user_data,
+        "messageData": messageData
+    }
+
+    return jsonify(chat_data)
+
 
 # SocketIO event handler
 # Listens for messages

@@ -17,7 +17,7 @@ function getUserId() {
         data: { action: "next-user", currentUserId: currentUserId},
         success: function(response) {
 
-            console.log("Random user id: ", response.userid);
+            console.log("Random user id: ",  typeof response.userid);
 
             $("#random-user").attr("data-random-id", response.userid);
             $("#random-user-img").attr("src",  response.picture);
@@ -46,9 +46,13 @@ $(document).ready(function() {
      // like button
     $(".display-panel").on("click", "#interested", function() {
         var senderId = getUserId();
-        var recipientId = $("#random-user").data("random-id");
+
+        // parse the string into an int
+        var recipientId = $("#random-user").data("random-id")
 
         console.log("You liked: ", recipientId);
+
+        console.log(typeof recipientId);
 
         const notification = "like";
 
@@ -57,9 +61,9 @@ $(document).ready(function() {
             url: "/matches",  
             data: { action: "interested", user_id: recipientId, notification: notification },
             success: function(response) {
-                console.log(response.userid + " has been liked and removed from display!");
+
                 console.log("Interest inserted successfully", response);
-                socket.emit("notification", { senderId: senderId, recipientId: recipientId, notification: notification});
+                socket.emit("notification", { senderId: senderId, recipientId: recipientId, notification: notification})
                 
                 cardHTML = '<div class="card display-user" data-selected-id="' + response.userid + '">' +
                 '<img src="' + response.picture + '" alt="matches-pic" data-interest-pic="' + response.picture + '">' +
@@ -69,6 +73,10 @@ $(document).ready(function() {
                 
                 // append card to panel
                 $(".card-slots").append(cardHTML);
+                
+                $("#random-user").removeData("random-id");
+
+                console.log("Uncached: ",recipientId);
 
                 // location.reload();
                 nextUser();
@@ -185,8 +193,6 @@ $(document).ready(function() {
         $("#chatWindowModal").modal("toggle");
     })
 
-
-
 });
 
 // display more info about users
@@ -209,5 +215,6 @@ socket.on("connect", () => {
 
     socket.emit('join_room', { room: currentUserId} );
 });
+
 
 
