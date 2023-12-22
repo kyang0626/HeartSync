@@ -17,7 +17,7 @@ function getUserId() {
         data: { action: "next-user", currentUserId: currentUserId},
         success: function(response) {
 
-            console.log("Random user id: ", response.userid);
+            console.log("Random user id: ",  typeof response.userid);
 
             $("#random-user").attr("data-random-id", response.userid);
             $("#random-user-img").attr("src",  response.picture);
@@ -48,9 +48,11 @@ $(document).ready(function() {
         var senderId = getUserId();
 
         // parse the string into an int
-        var recipientId = parseInt($("#random-user").attr("data-random-id"));
+        var recipientId = $("#random-user").data("random-id")
 
         console.log("You liked: ", recipientId);
+
+        console.log(typeof recipientId);
 
         const notification = "like";
 
@@ -71,6 +73,10 @@ $(document).ready(function() {
                 
                 // append card to panel
                 $(".card-slots").append(cardHTML);
+                
+                $("#random-user").removeData("random-id");
+
+                console.log("Uncached: ",recipientId);
 
                 // location.reload();
                 nextUser();

@@ -64,7 +64,6 @@ function playSound() {
     notificatonSound.play();
 }
 
-
 // Listener
 socket.on("notification", (data) => {
     // console.log("Client side: notification received", data);
