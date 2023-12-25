@@ -43,3 +43,6 @@ Create a new user profile by providing basic information, uploading photos, and 
 ### License
 
 This project is licensed under the MIT License.
+
+#### Quick Demo: https://clipchamp.com/watch/PWwj192rKJC
+
