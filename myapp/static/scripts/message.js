@@ -62,6 +62,8 @@ $(document).ready(function() {
     $(".conversation-slot").on("click", function() {
         var chatUserId = $(this).data("user-id");
 
+        var currentUserId = getUserId();
+
         console.log("Open chat User ID:", chatUserId);
 
         $.ajax({
