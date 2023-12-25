@@ -38,6 +38,14 @@ def before_request():
     g.user_profile = None
 
     if user_id is not None:
+        # check if user has a profile
+        user_profile_exist = UserProfile.query.filter_by(user_id=g.user_id).first()
+        # if none create a profile first
+        if user_profile_exist is None:
+            new_user_profile = UserProfile(user_id=user_id)
+            db.session.add(new_user_profile)
+            db.session.commit()
+        
         user_profile = UserProfile.query.filter_by(user_id=g.user_id).first()
         if user_profile:
             g.user_profile = user_profile

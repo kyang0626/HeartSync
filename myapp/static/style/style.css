@@ -25,6 +25,12 @@ a.navbar-brand, a.nav-link{
     text-align: center;
 }
 
+#registerForm {
+    padding: 200px 0 335px 0;
+    text-align: center;
+    color: white;
+}
+
 /* == Left Panel == */
 a.matches-name {
     color: white;

@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    User Profile
+{% endblock %}
+
+{% block main %}
+    <form action="/register-profile" method="post">
+        <div class="mb-3">
+            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="username" name="fullname" placeholder="Full Name" type="text">
+        </div>
+        <div class="mb-3">
+            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="city" name="city" placeholder="City" type="text">
+        </div>
+        <div class="mb-3">
+            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="state" name="fullname" placeholder="state" type="text">
+        </div>
+        <div class="mb-3">
+            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="bio" name="bio" placeholder="Bio" type="text">
+        </div>
+        <div class="mb-3">
+            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="age" name="fullname" placeholder="Full Name" type="text">
+        </div>
+        <div class="mb-3">
+            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="gender" name="gender" placeholder="Male or Female" type="text">
+        </div>
+        <div class="mb-3">
+            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="company" name="company" placeholder="Company" type="text">
+        </div>
+        <div class="mb-3">
+            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="school" name="school" placeholder="School" type="text">
+        </div>
+        <div class="mb-3">
+            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="sexuality" name="sexuality" placeholder="Sex" type="text">
+        </div>       
+        <button class="btn btn-primary" type="submit">Submit</button>
+    </form>
+{% endblock %}

@@ -21,7 +21,9 @@ def login():
         
         # Get username and password values
         username = request.form.get("username")
+        print(username)
         password = request.form.get("password")
+        print(password)
 
         # Look for user in database
         user = User.query.filter_by(username=username).first()
@@ -88,3 +90,28 @@ def register():
 
     else:
         return render_template("register.html")
+    
+
+# @auth_bp.route("/register-profile", methods=["GET", "POST"])
+# def register_profile(userid):
+
+#     if request.method == "POST":
+#         full_name = request.form.get("fullname")
+#         city = request.form.get("city")
+#         state = request.form.get("state")
+#         bio = request.form.get("bio")
+#         age = request.form.get("age")
+#         gender = request.form.get("gender")
+#         company = request.form.get("company")
+#         school = request.form.get("school")
+#         sexuality = request.form.get("sexuality")
+
+        
+
+
+
+#         return redirect("/")
+    
+#     else:
+
+#         return render_template("registry-information.html")
