@@ -90,7 +90,6 @@ $(document).ready(function() {
     // dislike 
     $("#not-interested").on("click", function() {
         var userId = $("#random-user").data("random-id");
-        console.log(userId);
 
         $.ajax({
             type: "POST",  
