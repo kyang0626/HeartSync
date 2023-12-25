@@ -45,4 +45,3 @@ Create a new user profile by providing basic information, uploading photos, and 
 This project is licensed under the MIT License.
 
 #### Quick Demo: https://clipchamp.com/watch/PWwj192rKJC
-
