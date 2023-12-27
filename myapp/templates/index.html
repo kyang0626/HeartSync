@@ -10,7 +10,11 @@
             <div class="col-3">
                 <div class="user-panel" data-userid="{{ profile.id }}">
                     <div class="panel-header">
-                        <a href="/profile"><img src="{{ profile.picture }}" alt="user-profile-pic" class="user-profile-pic"></a>
+                        {% if profile.picture %}
+                            <a href="/profile"><img src="{{ profile.picture }}" alt="user-profile-pic" class="user-profile-pic"></a>
+                        {% else %}
+                            <a href="/profile"><img src="../static/pictures/default-profilepic.jpg" alt="user-profile-pic" class="user-profile-pic"></a>
+                        {% endif %}
                         <div class="panel-header-info">
                             <h5>{{ profile.full_name }}</h5>
                             <div class="dropdown">

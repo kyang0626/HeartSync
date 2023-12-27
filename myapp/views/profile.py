@@ -18,6 +18,8 @@ def update_profile():
 
     user_profile = UserProfile.query.filter_by(user_id=g.user_profile.id).first()
 
+    print(user_profile)
+
     # Get the new information from the request
     new_bio = request.form.get("bioVal")
     new_name = request.form.get("nameVal")

@@ -16,7 +16,11 @@
 
 {% block display %}
     <div class="card user-edit-card">
-        <img src="{{ profile.picture }}" class="card-img-top" alt="user-picture">
+        {% if profile.picture %}
+            <img src="{{ profile.picture }}" class="card-img-top" alt="user-picture">
+        {% else %}
+            <img src="../static/pictures/default-profilepic.jpg" class="card-img-top" alt="user-picture">
+        {% endif %}
         <div class="card-body edit-body">
             <p>{{ profile.full_name }}</p>
             <button onclick="toggleEditProfile()">Edit Profile</button>
